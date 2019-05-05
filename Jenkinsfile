@@ -47,9 +47,10 @@ pipeline
             {
                 sh '''
                 echo "Building Image from Output snapshot of Package command"
-                                
+                     
                  '''
-                 docker.withRegistry('https://registry.example.com', 'anurag4516')
+                 //  docker build -t anurag4516/helloworld:${env.BUILD_ID}     
+                 docker.withRegistry('https://registry.hub.docker.com/v1/repositories/', 'anurag4516')
                   {
                  customImage = docker.build("anurag4516/helloworld:${env.BUILD_ID}")
                  }
@@ -65,7 +66,7 @@ pipeline
                 echo "Push Docker Image to registory"
                                 
                  '''
-           docker.withRegistry('https://registry.example.com', 'anurag4516')
+           docker.withRegistry('https://registry.hub.docker.com/v1/repositories/', 'anurag4516')
            {
                customImage.push()
 
