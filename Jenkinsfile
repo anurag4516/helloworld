@@ -9,12 +9,7 @@ pipeline
     stages
     {
         
-       stage('Checkout Main Project')
-       {
-         steps{
-           checkout scm;
-         }
-       }
+      
        stage('Checkout external Hellow-world proj')
         {
        
@@ -22,9 +17,10 @@ pipeline
             //We can also do ssh cloning for that we need to add public key to git 
             steps
             {
-            git branch: 'master',
-                credentialsId: 'anurag4516',
-                url: 'https://github.com/kuberguy/helloworld.git'
+                checkout scm;
+            // git branch: 'master',
+            //     credentialsId: 'anurag4516',
+            //     url: 'https://github.com/kuberguy/helloworld.git'
 
             sh "ls -lat"
             echo "Successfully Checkout of project "
