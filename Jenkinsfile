@@ -47,7 +47,7 @@ pipeline
             {
                 sh '''
                 echo "Building Image from Output snapshot of Package command"
-                docker build -anurag4516/${BUILD_NUMBER} -f Dockerfile .
+                docker build -t anurag4516/${BUILD_NUMBER} -f Dockerfile .
                 
                  '''
             }
