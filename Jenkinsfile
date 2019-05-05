@@ -8,7 +8,7 @@ pipeline
     }
     stages
     {
-        
+        def customImage
       
        stage('Checkout external Hellow-world proj')
         {
@@ -47,9 +47,12 @@ pipeline
             {
                 sh '''
                 echo "Building Image from Output snapshot of Package command"
-                docker build -t anurag4516/${BUILD_NUMBER} -f Dockerfile .
-                
+                                
                  '''
+                 docker.withRegistry('https://registry.example.com', 'anurag4516')
+                  {
+                 customImage = docker.build("anurag4516/helloworld:${env.BUILD_ID}")
+                 }
             }
         }
         
@@ -59,12 +62,15 @@ pipeline
             steps 
             {
              sh '''
-                echo "Building Image from Output snapshot of Package command"
-                
-                
+                echo "Push Docker Image to registory"
+                                
                  '''
-           
-            }
+           docker.withRegistry('https://registry.example.com', 'anurag4516')
+           {
+               customImage.push()
+
+           }
+         }
         }
         
     }
