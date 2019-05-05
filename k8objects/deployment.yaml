@@ -11,11 +11,13 @@ spec:
   template:
     metadata:
       labels:
-        app: helloworld
+        app: hello-world
   spec:
+    terminationGracePeriodSeconds: 30
     containers:
     - name: hello-world
       image: anurag4516/helloworld:latest
+      imagePullPolicy: "Always"
       ports:
       - containerPort: 80 
 

@@ -1,0 +1,55 @@
+pipeline 
+{
+    agent any
+    stages
+    {
+        def namespace = 'development'
+        stage("Deploy Application to k8 cluster")
+        {
+            steps
+            {
+                // Create namespace if it doesnot exists
+                sh '''
+                kubectl get ns ${namespace} | | kubectl create ns ${namespace}
+
+                '''
+            }
+            steps
+            {
+                // Create Deployment and Services . I have already added image pull policy as always in Pod
+                // It will basically create deployment from latest avialable image in docker hub image 
+                sh '''
+               kubectl --namespace=${namespace} apply -f k8objects/deployment.yaml
+               kubectl --namespace=${namespace} apply -f k8objects/services.yaml
+
+                '''
+            }
+            stage("Running curl test to get output as hello world ")
+            {
+                steps
+                {
+                    // As I have exposed PORT 80 of POD to NODEPORT 8080 of my service.
+                    // So application would be avialable at http://{IP_Of Master}:8080
+                    //Currently I am assuming that my Jenkins is itself master of k8 cluster . As I don't know where exactly is k8 master
+                    // So doing curl http://localhost:8080 will return hello-world we are checking if response code is 200
+
+                    sh '''
+                    
+                    URL_CURL_CHECK="https://github.com/"
+                    VAR_A=$(curl -Is --head "$URL_CURL_CHECK" | grep "HTTP/1.1 200 OK")
+                    VAR_B="HTTP/1.1 200 OK"
+
+                    echo
+                    if [ "$VAR_A" != "$VAR_B" ]; then
+                         echo "Not equal ..."
+                         exit(0)
+                    else [ "$VAR_A" = "$VAR_B" ]
+                        echo "It's a match"
+                    fi
+
+
+                    '''
+                }
+            }
+        }
+}
