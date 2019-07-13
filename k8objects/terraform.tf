@@ -1,5 +1,5 @@
 provider "aws" {
-    region ="us-east-1"
+        region ="us-east-1"
 }
 variable "server_port" {
     description = "For specifying variable Port"
@@ -19,6 +19,7 @@ ingress {
 resource "aws_instance" "terraform_demo_ec2"{
     ami ="ami-40d28157"
     instance_type="t2.micro"
+    vpc_security_group_ids = ["${aws_security_group.terraform_sg.id}"]
     tags {
         name = "terraform_demo_example"
     }
