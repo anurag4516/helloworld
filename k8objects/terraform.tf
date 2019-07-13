@@ -36,3 +36,6 @@ resource "aws_instance" "terraform_demo_ec2"{
         name = "terraform_demo_example"
     }
 }
+output "public_ip" {
+value = "${aws_instance.terraform_demo_ec2.public_ip}"
+}
