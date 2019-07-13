@@ -36,7 +36,7 @@ resource "aws_instance" "terraform_demo_ec2"{
         name = "terraform_demo_example"
     }
 }
-resource "aws_launch_configuration" "example" {
+resource "aws_launch_configuration" "autoscaling_lauch_config" {
     image_id = "ami-40d28157"
     instance_type = "t2.micro"
     security_groups = ["${aws_security_group.terraform_sg.id}"]
