@@ -36,6 +36,19 @@ resource "aws_instance" "terraform_demo_ec2"{
         name = "terraform_demo_example"
     }
 }
+resource "aws_launch_configuration" "example" {
+    image_id = "ami-40d28157"
+    instance_type = "t2.micro"
+    security_groups = ["${aws_security_group.terraform_sg.id}"]
+        user_data = <<-EOF
+        #!/bin/bash
+        echo "Hello, World" > index.html
+        nohup busybox httpd -f -p "${var.server_port}" &
+        EOF
+        lifecycle {
+        create_before_destroy = true
+    }
+}
 output "public_ip" {
 value = "${aws_instance.terraform_demo_ec2.public_ip}"
 }
