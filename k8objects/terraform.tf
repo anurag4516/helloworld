@@ -83,6 +83,15 @@ resource "aws_elb" "terraformelb" {
         target = "HTTP:${var.server_port}/"
     }
 }
+resource "aws_s3_bucket" "terraform_state" {
+    bucket = "terraform-up-and-running-state"
+        versioning {
+        enabled = true
+        }
+        lifecycle {
+            prevent_destroy = true
+        }
+    }
 output "public_ip" {
 value = "${aws_instance.terraform_demo_ec2.public_ip}"
 }
