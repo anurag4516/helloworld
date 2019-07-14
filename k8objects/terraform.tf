@@ -6,7 +6,7 @@ variable "server_port" {
     default = 8080
 }
 resource "aws_security_group" "terraform_sg"{
-name ="Security_Group_for_EC2_plus_Terraform"
+name ="Security_Group_for_EC2_plus_Terraform_Latest"
 ingress {
 
     from_port = "${var.server_port}"
