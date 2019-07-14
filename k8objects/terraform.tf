@@ -18,7 +18,7 @@ egress {
 
     from_port = "${var.server_port}"
     to_port = "${var.server_port}"
-    protocol = "tcp"
+    protocol = "-1"
     cidr_blocks = ["0.0.0.0/0"]
 }
 
@@ -69,6 +69,13 @@ resource "aws_elb" "example" {
             lb_protocol = "http"
             instance_port = "${var.server_port}"
             instance_protocol = "http"
+    }
+    health_check {
+        healthy_threshold = 1
+        unhealthy_threshold = 1
+        timeout = 3
+        interval = 30
+        target = "HTTP:${var.server_port}/"
     }
 }
 output "public_ip" {
