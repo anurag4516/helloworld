@@ -54,13 +54,15 @@ resource "aws_autoscaling_group" "example" {
     availability_zones = ["${data.aws_availability_zones.all.names}"]
     min_size = 2
     max_size = 10
+    load_balancers = ["${aws_elb.terraformelb.name}"]
+    health_check_type = "ELB"
     tag {
         key = "Name"
         value = "terraform-asg-example"
         propagate_at_launch = true
     }
 }
-resource "aws_elb" "example" {
+resource "aws_elb" "terraformelb" {
     name = "terraform-asg-example"
     availability_zones = ["${data.aws_availability_zones.all.names}"]
     security_groups = ["${aws_security_group.terraform_sg.id}"]
