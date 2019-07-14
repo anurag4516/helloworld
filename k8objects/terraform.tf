@@ -51,6 +51,7 @@ resource "aws_launch_configuration" "autoscaling_lauch_config" {
 }
 resource "aws_autoscaling_group" "example" {
     launch_configuration = "${aws_launch_configuration.autoscaling_lauch_config.id}"
+    availability_zones = ["${data.aws_availability_zones.all.names}"]
     min_size = 2
     max_size = 10
     tag {
