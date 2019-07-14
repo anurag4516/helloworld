@@ -83,3 +83,6 @@ resource "aws_elb" "terraformelb" {
 output "public_ip" {
 value = "${aws_instance.terraform_demo_ec2.public_ip}"
 }
+output "elb_dns_name" {
+value = "${aws_elb.terraformelb.dns_name}"
+}
