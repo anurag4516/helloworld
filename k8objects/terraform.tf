@@ -63,6 +63,13 @@ resource "aws_autoscaling_group" "example" {
 resource "aws_elb" "example" {
     name = "terraform-asg-example"
     availability_zones = ["${data.aws_availability_zones.all.names}"]
+    security_groups = ["${aws_security_group.terraform_sg.id}"]
+    listener {
+            lb_port = 80
+            lb_protocol = "http"
+            instance_port = "${var.server_port}"
+            instance_protocol = "http"
+    }
 }
 output "public_ip" {
 value = "${aws_instance.terraform_demo_ec2.public_ip}"
