@@ -5,6 +5,9 @@ variable "server_port" {
     description = "For specifying variable Port"
     default = 8080
 }
+data "aws_availability_zones" "available" {
+  state = "available"
+}
 resource "aws_security_group" "terraform_sg"{
 name ="Security_Group_for_EC2_plus_Terraform_Latest"
 ingress {
@@ -51,7 +54,7 @@ resource "aws_launch_configuration" "autoscaling_lauch_config" {
 }
 resource "aws_autoscaling_group" "example" {
     launch_configuration = "${aws_launch_configuration.autoscaling_lauch_config.id}"
-    availability_zones = ["${data.aws_availability_zones.all.names}"]
+    availability_zones = ["${data.aws_availability_zones.available.names[0]}" ,"${data.aws_availability_zones.available.names[1]}"]
     min_size = 2
     max_size = 10
     load_balancers = ["${aws_elb.terraformelb.name}"]
@@ -64,8 +67,8 @@ resource "aws_autoscaling_group" "example" {
 }
 resource "aws_elb" "terraformelb" {
     name = "terraform-asg-example"
-    availability_zones = ["${data.aws_availability_zones.all.names}"]
-    security_groups = ["${aws_security_group.terraform_sg.id}"]
+    availability_zones = ["${data.aws_availability_zones.available.names[0]}" ,"${data.aws_availability_zones.available.names[1]}"]
+   security_groups = ["${aws_security_group.terraform_sg.id}"]
     listener {
             lb_port = 80
             lb_protocol = "http"
